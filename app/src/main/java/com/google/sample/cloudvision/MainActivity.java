@@ -60,7 +60,7 @@ import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static final String CLOUD_VISION_API_KEY = "AIzaSyDXxzHEvvBTUbdxbeHAq531WTiP3Pr4QY8";
+    private static final String CLOUD_VISION_API_KEY = "AIzaSyA3_TId0xw0gcezMgJ_0p2JVwSwawZD4gY";
     public static final String FILE_NAME = "temp.jpg";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
@@ -76,8 +76,20 @@ public class MainActivity extends AppCompatActivity {
     private TextView mImageDetails;
     private ImageView mMainImage;
 
+    static ArrayList<String> breedList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        breedList = new ArrayList<String>();
+        breedList.add("miniature poodle");
+        breedList.add("toy poodle");
+        breedList.add("poodle");
+        breedList.add("standard poodle");
+        breedList.add("bichon");
+        breedList.add("maltese");
+        breedList.add("welsh corgi");
+        breedList.add("icelandic sheepdog");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -317,10 +329,14 @@ public class MainActivity extends AppCompatActivity {
         StringBuilder message = new StringBuilder("I found these things:\n\n");
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
+        //List<EntityAnnotation> labels = response.getResponses().get(0).getTextAnnotations();
         if (labels != null) {
             for (EntityAnnotation label : labels) {
-                message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
-                message.append("\n");
+                if(breedList.contains(label.getDescription())) {
+                    message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
+                    message.append("\n");
+                    break;
+                }
             }
         } else {
             message.append("nothing");
